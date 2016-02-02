@@ -1,0 +1,27 @@
+{
+  "name": "static-site-templates",
+  "version": "0.0.1",
+  "authors": [
+    "IXU Technologies"
+  ],
+  "description": "Static site with templates",
+  "main": "src/scripts/index.js",
+  "keywords": [
+    "static",
+    "gulp",
+    "site",
+    "templates"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.0"
+  }
+}

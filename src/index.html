@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!--[if IE lte 9]>
+    <html class="lte-ie9" lang="en-us" ng-app="app">
+<![endif]-->
+<!--[if !IE]>-->
+<html lang="en-us" ng-app="app">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<meta lang="en-US" />
+<base href="/">
+<title>Sitio Estático</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="author" content="IXU Technologies">
+<link rel="shortcut icon" href="assets/images/favicon.ico"/>
+
+<!--[if lte IE 9]>
+<script src="//cdnjs.cloudflare.com/ajax/libs/Base64/0.3.0/base64.min.js"></script>
+<![endif]-->
+
+<!-- build:css styles/lib.css -->
+<!-- bower:css -->
+<!-- endbower -->
+<!-- endbuild -->
+
+<!-- build:css styles/app.css -->
+<!-- inject:css -->
+<link rel="stylesheet" href="/.tmp/main.css">
+<!-- endinject -->
+<!-- endbuild -->
+</head>
+
+<body>
+    <!-- Header -->
+    @@include('layout/header.tpl.html')
+
+    <!-- Application content -->
+    <p>Contenido</p>
+
+    <!-- Loader -->
+    @@include('layout/loader.tpl.html')
+
+    <!-- build:js js/lib.js -->
+    <!-- bower:js -->
+    <script src="vendor/jquery/dist/jquery.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:js js/app.js -->
+    <!-- inject:js -->
+    <!-- endinject -->
+    <!-- endbuild -->
+</body>
+
+</html>
