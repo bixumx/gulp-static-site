@@ -125,7 +125,7 @@ gulp.task('wiredep', function() {
         .src(config.html)
         .pipe(wiredep(options))
         .pipe($.inject(injectScripts, {read: false}))
-        // .pipe(inject(js, '', config.jsOrder))
+        .pipe(inject(config.js, '', config.jsOrder))
         .pipe(gulp.dest(config.client));
 });
 
@@ -184,37 +184,44 @@ gulp.task('build', ['optimize', 'images', 'fonts', 'root-files'], function() {
  * @return {Stream}
  */
 
-gulp.task('optimize', ['inject', 'vet'], function() {
+gulp.task('optimize', ['clean-code', 'inject', 'vet', 'fileinclude'], function() {
     log('Optimizing the js, css, and html');
 
-    var assets = $.useref.assets({searchPath: './'});
     // Filters are named for the gulp-useref path
-    var cssFilter = $.filter('**/*.css');
-    var jsAppFilter = $.filter('**/' + config.optimized.app);
-    var jslibFilter = $.filter('**/' + config.optimized.lib);
+    var cssFilter = $.filter('**/*.css', {restore: true});
+    var jsAppFilter = $.filter(config.optimized.app, {restore: true});
+    var jsLibFilter = $.filter(config.optimized.lib, {restore: true});
+    var notHtmlFilter = $.filter(['**/*', '!**/*.html'], {restore: true});
 
     return gulp
-        .src(config.html)
+        .src(config.temp + '*.html')
         .pipe($.plumber())
-        .pipe(assets) // Gather all assets from the html with useref
+        
+        // Gather all assets from the html with useref
+        // <!-- build:js/css path/file.ext-->
+        .pipe($.useref({searchPath: './'}))
+
         // Get the css
         .pipe(cssFilter)
         .pipe($.cssnano())
-        .pipe(cssFilter.restore())
+        .pipe(cssFilter.restore)
+
         // Get the custom javascript
         .pipe(jsAppFilter)
         .pipe($.uglify())
         .pipe(getHeader())
-        .pipe(jsAppFilter.restore())
+        .pipe(jsAppFilter.restore)
+
         // Get the vendor javascript
-        .pipe(jslibFilter)
+        .pipe(jsLibFilter)
         .pipe($.uglify()) // another option is to override wiredep to use min files
-        .pipe(jslibFilter.restore())
+        .pipe(jsLibFilter.restore)
+
         // Take inventory of the file names for future rev numbers
+        .pipe(notHtmlFilter)
         .pipe($.rev())
-        // Apply the concat and file replacement with useref
-        .pipe(assets.restore())
-        .pipe($.useref())
+        .pipe(notHtmlFilter.restore)
+
         // Replace the file names in the html with rev numbers
         .pipe($.revReplace())
         .pipe(gulp.dest(config.build));
@@ -260,8 +267,7 @@ gulp.task('clean-styles', function() {
 gulp.task('clean-code', function() {
     var files = [].concat(
         config.temp + '**/*.js',
-        config.build + 'js/**/*.js',
-        config.build + '**/*.html'
+        config.build + 'js/**/*.js'
     );
     return clean(files);
 });
@@ -362,8 +368,7 @@ function inject(src, label, order) {
  */
 function orderSrc (src, order) {
     //order = order || ['**/*'];
-    return gulp
-        .src(src)
+    return gulp.src(src)
         .pipe($.if(order, $.order(order)));
 }
 

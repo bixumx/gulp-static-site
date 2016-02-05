@@ -32,11 +32,12 @@ module.exports = function() {
         index: client + 'index.html',
         // app js, with no specs
         js: [
-            client + 'scripts/**/*.module.js',
             client + 'scripts/**/*.js',
-            '!' + client + 'scripts/**/*.spec.js'
+            '!' + client + 'scripts/**/*.spec.js',
+            '!' + client + 'scripts/**/*.module.js'
         ],
         jsOrder: [
+            '**/util/*.js',
             '**/app.module.js',
             '**/*.module.js',
             '**/*.js'
@@ -52,8 +53,8 @@ module.exports = function() {
          * optimized files
          */
         optimized: {
-            app: 'app.js',
-            lib: 'lib.js'
+            app: ['**/app.js', '**/home.js'],
+            lib: ['**/lib.js']
         },
 
         /**
