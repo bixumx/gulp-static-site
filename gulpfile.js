@@ -123,6 +123,7 @@ gulp.task('wiredep', function() {
 
     return gulp
         .src(config.html)
+        .pipe($.clipEmptyFiles())
         .pipe(wiredep(options))
         .pipe($.inject(injectScripts, {read: false}))
         .pipe(inject(config.js, '', config.jsOrder))
