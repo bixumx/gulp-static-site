@@ -9,7 +9,7 @@ var _           = require('lodash');
 var $           = require('gulp-load-plugins')({lazy: true});
 var url         = require('url');
 var proxy       = require('proxy-middleware');
-var proxyOptions = url.parse('http://localhost:9000/api');
+var proxyOptions = url.parse('http://localhost:8080/api');
 
 proxyOptions.route = '/api';
 
@@ -156,7 +156,7 @@ gulp.task('fileinclude', function() {
 gulp.task('zip', ['build'], function() {
     log('Zipping build folder into ' + config.zip);
 
-    return gulp.src('./build/**/*')
+    return gulp.src('./build/**/*', {base: '.'})
     .pipe($.zip(config.zip))
     .pipe(gulp.dest('./'));
 });
@@ -278,7 +278,7 @@ gulp.task('clean-code', function() {
  * --debug-brk or --debug
  * --nosync
  */
-gulp.task('serve-dev', ['inject', 'fileinclude'], function() {
+gulp.task('serve-dev', ['inject'], function() {
     serve(true /*isDev*/);
 });
 
